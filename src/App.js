@@ -1,22 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import "./App.css";
+import { Octokit } from "@octokit/core";
 
 function App() {
+  const octokit = new Octokit({
+    auth: "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",
+  });
+
+  useEffect(() => {
+    fetchCommits();
+  }, []);
+
+  const fetchCommits = async () => {
+    const { data } = await octokit.request("/repos/anilasdev/gcommits/commits");
+    console.log(data);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
     </div>
   );
