@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  text-align: right;
 }
 
 .App-logo {
@@ -26,10 +26,72 @@
   }
 }
 .commits {
+  margin-top: 20px;
 }
 .commit {
   text-align: left;
   border: 1px solid white;
   padding: 10px;
   min-width: 80%;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.reloadSingle {
+  height: 2em;
+  padding: 0.25em;
+  width: 2em;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+.spin {
+  -webkit-animation: rotate 1.5s linear infinite;
+  animation: rotate 1.5s linear infinite;
+}
+.reloadSingle:before,
+.reloadSingle:after {
+  content: "";
+  display: block;
+}
+.reloadSingle:before {
+  border-color: transparent white white white;
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 0.125em;
+  height: 1.5em;
+  width: 1.5em;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.reloadSingle:after {
+  border-color: transparent transparent transparent white;
+  border-style: solid;
+  border-width: 0.3125em 0 0.3125em 0.5em;
+  height: 0;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+}
+
+@-webkit-keyframes rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
 }
