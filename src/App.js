@@ -12,6 +12,7 @@ function App() {
   const [isFetching, setIsfetching] = useState(false);
   const [now, setNow] = useState(Date.now());
   const [countdown, setCountdown] = useState(Date.now());
+  const [initialFetch, setInitialFetch] = useState(false);
   useEffect(() => {
     let isFound = localStorage.getItem("access_token");
     if (isFound) {
@@ -27,19 +28,24 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (isTokenFound) fetchCommits();
+    if (isTokenFound) {
+      fetchCommits();
+    }
   }, [isTokenFound]);
 
   const fetchCommits = async () => {
     const { data } = await octokitConfig.request(
       "/repos/anilasdev/gcommits/commits"
     );
-    console.log(data);
-    setCommits(data);
+    // fetching is faster, so in order to show the loading, a timeout has been introduced
     setTimeout(() => {
+      setCommits(data);
       setIsfetching(false);
       setNow(Date.now());
       setCountdown(Date.now());
+      if (!initialFetch) {
+        setInitialFetch(true);
+      }
     }, 1000);
   };
 
@@ -76,22 +82,24 @@ function App() {
       )}
       {isTokenFound && (
         <>
-          <div className="reload">
-            <div
-              class={`reloadSingle ${isFetching ? "spin" : ""}`}
-              onClick={onRefresh}
-              style={{ transform: [{ rotate: "360deg" }] }}
-            ></div>
-            <Countdown
-              date={now + 30000}
-              key={countdown}
-              onComplete={onRefresh}
-              renderer={({ hours, minutes, seconds, completed }) => {
-                // Render a countdown
-                return <span>{seconds}</span>;
-              }}
-            />
-          </div>
+          {initialFetch && (
+            <div className="reload">
+              <div
+                class={`reloadSingle ${isFetching ? "spin" : ""}`}
+                onClick={onRefresh}
+                style={{ transform: [{ rotate: "360deg" }] }}
+              ></div>
+              <Countdown
+                date={now + 30000}
+                key={countdown}
+                onComplete={onRefresh}
+                renderer={({ hours, minutes, seconds, completed }) => {
+                  // Render a countdown
+                  return <span>{seconds}</span>;
+                }}
+              />
+            </div>
+          )}
           <div className="commits">
             {commits.map((commit) => (
               <div className="commit">
